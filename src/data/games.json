@@ -1,0 +1,49 @@
+{
+  "games": [
+    {
+      "title": "Last of Us",
+      "description": "Best Naughty Dog game",
+      "year": "2012",
+      "genre": "Third-person action",
+      "cast": ["Troy Baker", "Ellie", "Nolan North"],
+      "poster": "/assets/last-of-us.jpg",
+      "rating": "10/10, 10 stars or w/e"
+    },
+    {
+      "title": "God of War",
+      "description": "Latest God of War game",
+      "year": "2018",
+      "genre": "Third-person action",
+      "cast": ["Kratos", "Someone else"],
+      "poster": "/assets/new-mutants-poster.jpg",
+      "rating": "10/10, 10 stars or w/e"
+    },
+    {
+      "title": "Spider-Man",
+      "description": "The PS4 Spider-Man game",
+      "year": "2018",
+      "genre": "Third-person action",
+      "cast": ["Peter Parker", "Spider-Man"],
+      "poster": null,
+      "rating": "10/10, 10 stars or w/e"
+    },
+    {
+      "title": "Red Dead Redemption 2",
+      "description": "Wild, wild west 2",
+      "year": "2018",
+      "genre": "Third-person action",
+      "cast": ["Arthur", "Someone else"],
+      "poster": null,
+      "rating": "10/10, 10 stars or w/e"
+    },
+    {
+      "title": "The Witcher 3",
+      "description": "Witchman in a large world",
+      "year": "2018",
+      "genre": "Third-person RPG",
+      "cast": ["Geralt", "Roach"],
+      "poster": "/assets/the-witcher-3.jpg",
+      "rating": "10/10, 10 stars or w/e"
+    }
+  ]
+}
