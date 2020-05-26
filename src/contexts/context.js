@@ -1,8 +1,15 @@
 import React, { useState, useEffect, useReducer } from "react";
 import { watchlistReducer } from "../reducers/watchlistReducer";
 // import { useFetch } from "../hooks/useFetch";
+import { movieReducer } from "../reducers/movieReducer";
 
 const Context = React.createContext();
+
+const initialState = {
+  data: [],
+  isLoading: true,
+  error: "",
+};
 
 const ContextProvider = ({ children }) => {
   const API_KEY = "04885294e995c2b055be7cf3da2429ed";
@@ -10,16 +17,17 @@ const ContextProvider = ({ children }) => {
   // const API_KEY2 = "facf1e25";
   // const fetchedData = useFetch(baseurl).results;
   // const [isLoading, setIsLoading] = useState(false);
-  const [items, setItems] = useState([]);
+  // const [items, setItems] = useState([]);
   const [selectedItem, setSelectedItem] = useState(JSON.parse(localStorage.getItem("selectedItem")) || {});
-  const [watchlist, dispatch] = useReducer(watchlistReducer, [], () => {
-    const localWatchlist = localStorage.getItem("watchlist");
-    return localWatchlist ? JSON.parse(localWatchlist) : [];
-  });
+  // const [watchlist, dispatch] = useReducer(watchlistReducer, [], () => {
+  //   const localWatchlist = localStorage.getItem("watchlist");
+  //   return localWatchlist ? JSON.parse(localWatchlist) : [];
+  // });
+  const [items, dispatch] = useReducer(movieReducer, initialState);
 
-  useEffect(() => {
-    localStorage.setItem("watchlist", JSON.stringify(watchlist));
-  }, [watchlist]);
+  // useEffect(() => {
+  //   localStorage.setItem("watchlist", JSON.stringify(watchlist));
+  // }, [watchlist]);
 
   useEffect(() => {
     localStorage.setItem("selectedItem", JSON.stringify(selectedItem));
@@ -35,26 +43,28 @@ const ContextProvider = ({ children }) => {
 
   // console.log(items);
 
-  useEffect(async () => {
-    try {
-      const res = await fetch(
-        `https://api.themoviedb.org/3/discover/movie?api_key=${API_KEY}&language=en-US&sort_by=popularity.desc&include_adult=false&include_video=false&page=1`
-      );
-      const data = await res.json();
-      setItems(data.results);
-      // appendWatchlisted();
-    } catch (error) {
-      console.log(error);
+  useEffect(() => {
+    async function fetchData() {
+      try {
+        const res = await fetch(
+          `https://api.themoviedb.org/3/discover/movie?api_key=${API_KEY}&language=en-US&sort_by=popularity.desc&include_adult=false&include_video=false&page=1`
+        );
+        const data = await res.json();
+        dispatch({ type: "FETCH_SUCCESS", payload: data.results });
+      } catch (error) {
+        dispatch({ type: "FETCH_ERROR", payload: error });
+      }
     }
+    fetchData();
   }, []);
   // console.log(items);
 
-  const appendWatchlisted = () => {
-    let newArr = [...items];
-    const alteredItems = newArr.map((movie) => ({ ...movie, watchlisted: false }));
-    setItems(alteredItems);
-    console.log(items);
-  };
+  // const appendWatchlisted = () => {
+  //   let newArr = [...items];
+  //   const alteredItems = newArr.map((movie) => ({ ...movie, watchlisted: false }));
+  //   setItems(alteredItems);
+  //   console.log(items);
+  // };
 
   // const testWatchlist = () => {
   //   console.log("Stuff happens");
@@ -79,9 +89,7 @@ const ContextProvider = ({ children }) => {
   };
 
   return (
-    <Context.Provider value={{ items, setItems, selectedItem, API_KEY, handleDetails, watchlist, dispatch }}>
-      {children}
-    </Context.Provider>
+    <Context.Provider value={{ items, selectedItem, API_KEY, handleDetails, dispatch }}>{children}</Context.Provider>
   );
 };
 

@@ -14,6 +14,8 @@ const Page = (props) => {
   const { isAuthenticated } = useContext(AuthContext);
   const { theme } = useContext(ThemeContext);
 
+  console.log(items);
+
   const content = () => {
     if (isAuthenticated) {
       return (
@@ -21,7 +23,7 @@ const Page = (props) => {
           <h1>{props.title}</h1>
           <Search />
           <div className="row">
-            {items.map((item) => (
+            {items.data.map((item) => (
               <ItemCard key={item.id} item={item} />
             ))}
           </div>
