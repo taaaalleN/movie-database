@@ -1,22 +1,26 @@
 import React, { useState, useEffect, useReducer } from "react";
-import { watchlistReducer } from "../reducers/watchlistReducer";
 // import { useFetch } from "../hooks/useFetch";
 import { movieReducer } from "../reducers/movieReducer";
+import { watchlistReducer } from "../reducers/watchlistReducer";
 
 const Context = React.createContext();
 
 const initialState = {
   data: [],
-  isLoading: true,
+  // selectedItem: {},
+  loading: true,
   error: "",
+  watchlist: [],
 };
 
 const ContextProvider = ({ children }) => {
   const API_KEY = "04885294e995c2b055be7cf3da2429ed";
-  const baseurl = `https://api.themoviedb.org/3/discover/movie?api_key=${API_KEY}&language=en-US&sort_by=popularity.desc&include_adult=false&include_video=false&page=1`;
+  const baseurl = `https://api.themoviedb.org/3`;
+  const base_path = "/movie";
+  // console.log(props.category);
+  // const baseurl = `https://api.themoviedb.org/3/discover/movie?api_key=${API_KEY}&language=en-US&sort_by=popularity.desc&include_adult=false&include_video=false&page=1`;
   // const API_KEY2 = "facf1e25";
   // const fetchedData = useFetch(baseurl).results;
-  // const [isLoading, setIsLoading] = useState(false);
   // const [items, setItems] = useState([]);
   const [selectedItem, setSelectedItem] = useState(JSON.parse(localStorage.getItem("selectedItem")) || {});
   // const [watchlist, dispatch] = useReducer(watchlistReducer, [], () => {
@@ -41,35 +45,53 @@ const ContextProvider = ({ children }) => {
   //     .catch((err) => console.log(err));
   // }, []);
 
-  // console.log(items);
+  console.log(items);
 
-  useEffect(() => {
-    async function fetchData() {
-      try {
-        const res = await fetch(
-          `https://api.themoviedb.org/3/discover/movie?api_key=${API_KEY}&language=en-US&sort_by=popularity.desc&include_adult=false&include_video=false&page=1`
-        );
-        const data = await res.json();
-        dispatch({ type: "FETCH_SUCCESS", payload: data.results });
-      } catch (error) {
-        dispatch({ type: "FETCH_ERROR", payload: error });
-      }
-    }
-    fetchData();
-  }, []);
+  // Kör getMovies vid uppstart
+  // useEffect(() => {
+  //   async function getMovies(category) {
+  //     try {
+  //       const res = await fetch(`${baseurl}${base_path}${category}/?language=en-US&api_key=${API_KEY}`);
+  //       const data = await res.json();
+  //       const dataWithWatchlist = await data.results.map((item) => ({ ...item, watchlisted: false }));
+  //       dispatch({ type: "FETCH_SUCCESS", payload: dataWithWatchlist });
+  //     } catch (error) {
+  //       dispatch({ type: "FETCH_ERROR", payload: error });
+  //     }
+  //   }
+  //   getMovies();
+  // }, []);
+
+  // Test att köra getMovies vid inladdning av sidan, där sidan kör getMovies istället för att context kör det vid start
+  const getMovies = (category) => {
+    // dispatch({ type: "CATEGORY_CHANGE", category });
+    fetch(`${baseurl}${base_path}${category}/?language=en-US&api_key=${API_KEY}`)
+      .then((res) => res.json())
+      .then((data) => {
+        // const dataWithWatchlist = data.results.map((item) => ({ ...item, watchlisted: false }));
+        const dataWithWatchlist = formatMovieWatchlist(data.results);
+        dispatch({ type: "FETCH_SUCCESS", payload: dataWithWatchlist });
+      })
+      .catch((error) => dispatch({ type: "FETCH_ERROR", payload: error }));
+    //   const data = await res.json();
+    //   const dataWithWatchlist = await data.results.map((item) => ({ ...item, watchlisted: false }));
+    //   dispatch({ type: "FETCH_SUCCESS", payload: dataWithWatchlist });
+    // } catch (error) {
+    //   dispatch({ type: "FETCH_ERROR", payload: error });
+    // }
+  };
+
+  const formatMovieWatchlist = (movies) => {
+    const moviesWithWatchlist = movies.map((item) => ({ ...item, watchlisted: false }));
+    return moviesWithWatchlist;
+  };
+
   // console.log(items);
 
   // const appendWatchlisted = () => {
   //   let newArr = [...items];
   //   const alteredItems = newArr.map((movie) => ({ ...movie, watchlisted: false }));
   //   setItems(alteredItems);
-  //   console.log(items);
-  // };
-
-  // const testWatchlist = () => {
-  //   console.log("Stuff happens");
-  //   if (!items) return;
-  //   items.map((movie) => setItems({ test: "stuff" }));
   //   console.log(items);
   // };
 
@@ -84,12 +106,21 @@ const ContextProvider = ({ children }) => {
   // }, []);
 
   const handleDetails = (id) => {
-    const wantedItem = items.find((item) => item.id === id);
+    const wantedItem = items.data.find((item) => item.id === id);
     setSelectedItem(wantedItem);
   };
 
+  // const addToWatchlist = (movie) => {
+  //   if (!movie) return;
+  //   dispatch({ type: "ADD_TO_WATCHLIST", payload: movie });
+  // };
+
   return (
-    <Context.Provider value={{ items, selectedItem, API_KEY, handleDetails, dispatch }}>{children}</Context.Provider>
+    <Context.Provider
+      value={{ items, selectedItem, API_KEY, handleDetails, dispatch, getMovies, formatMovieWatchlist }}
+    >
+      {children}
+    </Context.Provider>
   );
 };
 
