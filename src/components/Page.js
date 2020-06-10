@@ -7,21 +7,35 @@ import { Context } from "../contexts/context";
 import { AuthContext } from "../contexts/authContext";
 import { ThemeContext } from "../contexts/themeContext";
 
-const Page = (props) => {
+// Test för att fixa categories/getMovies
+import { useLocation } from "react-router-dom";
+
+const Page = ({ title, category }) => {
   // const API_KEY = "04885294e995c2b055be7cf3da2429ed";
   // const [items, setItems] = useState([]);
-  const { items } = useContext(Context);
+  const { items, getMovies } = useContext(Context);
   const { isAuthenticated } = useContext(AuthContext);
   const { theme } = useContext(ThemeContext);
 
+  let location = useLocation();
+
   console.log(items);
+  // console.log(items.data);
+  // console.log(items.data.title);
+  // console.log(category);
+
+  // Varje gång en film laddas färdigt uppdateras komponenten
+  // Alltså uppdateras den 20 ggr per refresh eftersom det är 20 filmer
+  useEffect(() => {
+    getMovies(category);
+  }, [location]); // Kör getMovies när url:en ändras, bättre men ändå för många uppdateringar tror jag
 
   const content = () => {
     if (isAuthenticated) {
       return (
         <div>
-          <h1>{props.title}</h1>
-          <Search />
+          <h1>{title}</h1>
+          {/* <Search /> */}
           <div className="row">
             {items.data.map((item) => (
               <ItemCard key={item.id} item={item} />
