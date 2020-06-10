@@ -5,7 +5,7 @@ import { Context } from "../contexts/context";
 
 const Search = () => {
   const [query, setQuery] = useState("");
-  const { setItems, API_KEY } = useContext(Context);
+  const { setItems, API_KEY, dispatch, formatMovieWatchlist } = useContext(Context);
 
   const handleChange = (e) => {
     setQuery(e.target.value);
@@ -29,14 +29,18 @@ const Search = () => {
   const searchMovies = async (e) => {
     e.preventDefault();
     if (!query) return;
-    setItems([]);
+    dispatch({ type: "RESET_MOVIES" });
+    // setItems([]);
     formatQuery(query);
     try {
       const res = await fetch(`https://api.themoviedb.org/3/search/movie?api_key=${API_KEY}&query=${query}`);
       const data = await res.json();
-      setItems(data.results);
+      // setItems(data.results);
+      const dataWithWatchlist = formatMovieWatchlist(data.results);
+      dispatch({ type: "FETCH_SUCCESS", payload: dataWithWatchlist });
     } catch (error) {
-      console.log(error);
+      // console.log(error);
+      dispatch({ type: "FETCH_ERROR", payload: error });
     }
     setQuery("");
   };
@@ -70,17 +74,17 @@ const SearchWrapper = styled.div`
   // Utkommenterat är en annan lösning för knappen inuti sökinputen
   // Wrapper flex, input flex-grow - tror det är allt
 
-  .search__form {
-    // width: 100%;
-    display: flex;
-    justify-content: center;
-  }
+  // .search__form {
+  //   // width: 100%;
+  //   // display: flex;
+  //   // justify-content: center;
+  // }
 
   .search__wrapper {
     position: relative;
-    width: 50%;
     border-radius: 5px;
 
+    // width: 50%;
     // display: flex;
   }
 
