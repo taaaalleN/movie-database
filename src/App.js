@@ -11,6 +11,8 @@ import Search from "./components/Search";
 import Profile from "./components/Profile";
 import Watchlist from "./components/Watchlist";
 
+import { POPULAR, TOP_RATED, UPCOMING } from "./api";
+
 function App() {
   return (
     <>
@@ -23,8 +25,17 @@ function App() {
             <Search />
           </div>
         </Route>
-        <Route exact path="/movies">
-          <Page title={"Movies"} />
+        {/* <Route exact path="/discover">
+          <Page title={"Discover"} category={DISCOVER} />
+        </Route> */}
+        <Route exact path="/popular">
+          <Page title={"Popular"} category={POPULAR} />
+        </Route>
+        <Route exact path="/toprated">
+          <Page title={"Top Rated"} category={TOP_RATED} />
+        </Route>
+        <Route exact path="/upcoming">
+          <Page title={"Upcoming"} category={UPCOMING} />
         </Route>
         <Route path="/games">
           <Page />
