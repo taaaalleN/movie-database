@@ -7,12 +7,17 @@
 
   --main-orange: #ff5733;
   --navbar-blue: #05668d;
+  --alt-red-orange: #ff424f;
 }
 
 *,
 *::before,
 *::after {
   box-sizing: border-box;
+}
+
+.theme-btn {
+  margin-right: 1.2em;
 }
 
 body {
