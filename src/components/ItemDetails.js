@@ -1,10 +1,10 @@
-import React, { useContext, useEffect } from "react";
+import React, { useContext, useEffect, useReducer } from "react";
 import styled from "styled-components";
-// import { useParams } from "react-router-dom";
 import { Context } from "../contexts/context";
 import { ThemeContext } from "../contexts/themeContext";
 import logo from "../logo.svg";
 import { ButtonContainer } from "../components/Button";
+// import { watchlistReducer } from "../reducers/watchlistReducer";
 
 const ItemDetails = () => {
   const { selectedItem, dispatch, items, setItems } = useContext(Context);
@@ -12,6 +12,7 @@ const ItemDetails = () => {
   // const params = useParams();
   // console.log(params);
   const IMAGE_PATH = "https://image.tmdb.org/t/p/w600_and_h900_bestv2/"; // Sätt i en global constants-fil?
+  // const [theSelectedItem, dispatch] = useReducer(watchlistReducer, selectedItem);
 
   // const API_KEY = "04885294e995c2b055be7cf3da2429ed";
   // const URL = `https://api.themoviedb.org/${movieId}/movie/343611?api_key=`;
@@ -21,7 +22,8 @@ const ItemDetails = () => {
   // console.log(dispatch);
   // console.log(watchlist);
 
-  console.log(selectedItem);
+  // console.log(selectedItem);
+  // console.log(selectedItem.watchlisted);
   // console.log(items);
   // useEffect(() => {
   //   // items.map((movie) => setItems([...items, { ...movie, watchlisted: false }]));
@@ -30,6 +32,7 @@ const ItemDetails = () => {
   //   // setItems(alteredMovies);
   //   setItems(alteredMovies);
   // }, []);
+  // console.log(items.watchlist);
 
   return (
     <DetailsWrapper theme={theme}>
@@ -57,13 +60,14 @@ const ItemDetails = () => {
               <p>{selectedItem.overview}</p>
             </div>
           </div>
-          <ButtonContainer
+          {/* <ButtonContainer
             theme={theme}
-            onClick={() =>
-              dispatch({ type: "ADD_TO_WATCHLIST", movie: { id: selectedItem.id, title: selectedItem.title } })
-            }
+            onClick={() => dispatch({ type: "ADD_TO_WATCHLIST", movie: { selectedItem } })}
           >
             {selectedItem.watchlisted ? "Remove from watchlist" : "Add to watchlist"}
+          </ButtonContainer> */}
+          <ButtonContainer theme={theme} onClick={() => dispatch({ type: "ADD_TO_WATCHLIST", payload: selectedItem })}>
+            {items.watchlist.includes(selectedItem) ? "Remove from watchlist" : "Add to watchlist"}
           </ButtonContainer>
         </section>
       </div>
@@ -105,6 +109,7 @@ const DetailsWrapper = styled.div`
     // position: relative;
     // top: 0;
     // left: 0;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
 
     img {
       display: block;
