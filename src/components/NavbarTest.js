@@ -1,10 +1,11 @@
 import React, { useContext } from "react";
 import styled from "styled-components";
-import { Link } from "react-router-dom";
+import { Link, NavLink } from "react-router-dom";
 import { AuthContext } from "../contexts/authContext";
 import { ThemeContext, themes } from "../contexts/themeContext";
 
 import { ButtonContainer } from "../components/Button";
+import Search from "./Search";
 
 const Navbar = () => {
   const { isAuthenticated, toggleAuth } = useContext(AuthContext);
@@ -23,7 +24,7 @@ const Navbar = () => {
       {/* <button style={{ backgroundColor: `${theme}` }} onClick={toggleTheme}>
         {themeText}
       </button> */}
-      <ButtonContainer theme={theme} onClick={toggleTheme}>
+      <ButtonContainer theme={theme} onClick={toggleTheme} className="theme-btn">
         {themeText}
       </ButtonContainer>
       <Link to="/" className="navbar-brand site-title">
@@ -33,26 +34,41 @@ const Navbar = () => {
       <div className="collapse navbar-collapse" id="navbarMenu">
         <ul className="navbar-nav">
           <li className="nav-item mx-3">
-            <Link to="/" className="nav-link">
+            <NavLink exact to="/" className="nav-link" activeClassName="is-active">
               Home
-            </Link>
+            </NavLink>
+          </li>
+          {/* <li className="nav-item mx-3">
+            <NavLink to="/discover" className="nav-link" activeClassName="is-active">
+              Discover
+            </NavLink>
+          </li> */}
+          <li className="nav-item mx-3">
+            <NavLink to="/popular" className="nav-link" activeClassName="is-active">
+              Popular
+            </NavLink>
           </li>
           <li className="nav-item mx-3">
-            <Link to="/movies" className="nav-link">
-              Movies
-            </Link>
+            <NavLink to="/toprated" className="nav-link" activeClassName="is-active">
+              Top Rated
+            </NavLink>
           </li>
           <li className="nav-item mx-3">
-            <Link to="/games" className="nav-link">
-              Games
-            </Link>
+            <NavLink to="/upcoming" className="nav-link" activeClassName="is-active">
+              Upcoming
+            </NavLink>
+          </li>
+        </ul>
+        <ul className="navbar-nav">
+          <li className="nav-search nav-item mx-3">
+            <Search />
           </li>
         </ul>
         <ul className="navbar-nav ml-auto align-items-center">
           <li className="nav-item">
-            <Link to="/profile" className="nav-link">
+            <NavLink to="/profile" className="nav-link" activeClassName="is-active">
               Profile Name
-            </Link>
+            </NavLink>
           </li>
           <li className="nav-item">
             <Link to="/profile" className="nav-link">
@@ -79,9 +95,14 @@ const NavWrapper = styled.nav`
     font-weight: 700;
   }
 
-  .nav-link:hover {
-    color: #ff5733 !important;
-    // font-size: 1.2em;
+  // .nav-link:hover {
+  //   color: #ff5733 !important;
+  //   // font-size: 1.2em;
+  // }
+
+  .nav-item a.is-active,
+  .nav-item:hover a {
+    color: var(--main-orange) !important;
   }
 
   .nav-link img {
