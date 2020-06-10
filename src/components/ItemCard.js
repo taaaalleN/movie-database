@@ -8,10 +8,10 @@ import { Context } from "../contexts/context";
 import { ThemeContext } from "../contexts/themeContext";
 import { ButtonContainer } from "./Button";
 
-const ItemCard = (props) => {
+const ItemCard = ({ item }) => {
   const IMAGE_PATH = "https://image.tmdb.org/t/p/w600_and_h900_bestv2/"; // Sätt i en global constans-fil?
   // const IMAGE_PATH = "https://image.tmdb.org/t/p/w600_and_h900_bestv2/xBHvZcjRiWyobQ9kxBhO6B2dtRI.jpg"
-  const { id, title, overview, poster_path, release_date, vote_average, genre_ids } = props.item;
+  const { id, title, overview, poster_path, release_date, vote_average, genre_ids } = item;
   const { handleDetails } = useContext(Context);
   const { theme } = useContext(ThemeContext);
 
