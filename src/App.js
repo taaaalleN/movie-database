@@ -6,7 +6,6 @@ import { Route, Switch } from "react-router-dom";
 import Navbar from "./components/Navbar";
 import Page from "./components/Page";
 import ItemDetails from "./components/ItemDetails";
-import NavbarTest from "./components/NavbarTest";
 import Search from "./components/Search";
 import Profile from "./components/Profile";
 import Watchlist from "./components/Watchlist";
@@ -17,7 +16,7 @@ function App() {
   return (
     <>
       {/* <Navbar /> */}
-      <NavbarTest />
+      <Navbar />
       <Switch>
         <Route exact path="/">
           <div id="homepage">
