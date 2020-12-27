@@ -93,7 +93,8 @@ const SearchWrapper = styled.div`
     font-size: 1.1rem;
     border: none;
     border-radius: 5px;
-    padding: 7px;
+    padding: 5px;
+    // padding: 7px;
     // flex-grow: 2;
 
     ::placeholder {
@@ -110,7 +111,7 @@ const SearchWrapper = styled.div`
     right: 0;
     top: 0;
 
-    padding: 0.5em 1em;
+    padding: 0.4em 1.1em;
     border: none;
     border-radius: 5px;
     transition: background-color 250ms ease-in-out;

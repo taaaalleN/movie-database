@@ -6,6 +6,7 @@ import { ThemeContext, themes } from "../contexts/themeContext";
 
 import { ButtonContainer } from "../components/Button";
 import Search from "./Search";
+import ThemeButton from "./ThemeButton";
 
 const Navbar = () => {
   const { isAuthenticated, toggleAuth } = useContext(AuthContext);
@@ -24,9 +25,10 @@ const Navbar = () => {
       {/* <button style={{ backgroundColor: `${theme}` }} onClick={toggleTheme}>
         {themeText}
       </button> */}
-      <ButtonContainer theme={theme} onClick={toggleTheme} className="theme-btn">
+      <ThemeButton />
+      {/* <ButtonContainer theme={theme} onClick={toggleTheme} className="theme-btn">
         {themeText}
-      </ButtonContainer>
+      </ButtonContainer> */}
       <Link to="/" className="navbar-brand site-title">
         {/* <h2 className="nav-link site-title">Unique Name</h2> */}
         Unique Name
@@ -118,6 +120,11 @@ const NavWrapper = styled.nav`
   .site-title {
     font-family: "Oswald", sans-serif;
     font-size: 1.8em;
+    margin-left: 1em;
+  }
+
+  .nav-search {
+    width: 400px;
   }
 
   @media (max-width: 700px) {
