@@ -82,8 +82,11 @@ const ItemContainer = styled.div`
   &:hover {
     .card {
       border: 0.04rem solid rgba(0, 0, 0, 0.2);
-      box-shadow: 0 0 8px #ff5733;
+      // box-shadow: 0 10px 8px #ff5733;
+      box-shadow: 0 10px 10px rgba(0, 0, 0, 0.5);
       cursor: pointer;
+      transform: translateY(-10px);
+      transition-delay: 0.1s; // För att delaya hover-translaten, men måste göras annorlunda - detta är en skitlösning
     }
 
     img {
