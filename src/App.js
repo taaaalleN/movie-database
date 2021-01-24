@@ -1,32 +1,36 @@
-import React from "react";
-import "bootstrap/dist/css/bootstrap.css";
+import React, { useContext } from "react";
 import "./App.css";
 
 import { Route, Switch } from "react-router-dom";
-import Navbar from "./components/Navbar";
+import Nav from "./components/Nav";
 import Page from "./components/Page";
 import ItemDetails from "./components/ItemDetails";
 import Search from "./components/Search";
 import Profile from "./components/Profile";
 import Watchlist from "./components/Watchlist";
+import Home from "./pages/Home";
+import SignIn from "./pages/sign-in";
+import SignUp from "./pages/sign-up";
+import Footer from "./containers/footer";
 
-import { POPULAR, TOP_RATED, UPCOMING } from "./api";
+import * as ROUTES from "./constants/routes";
+import { POPULAR, TOP_RATED, UPCOMING, DISCOVER } from "./constants/constants";
+
+import { ThemeContext } from "./contexts/themeContext";
 
 function App() {
+  const { theme } = useContext(ThemeContext);
+
   return (
     <>
-      {/* <Navbar /> */}
-      <Navbar />
+      <Nav />
       <Switch>
         <Route exact path="/">
-          <div id="homepage">
-            <h1>Home Page</h1>
-            <Search />
-          </div>
+          <Home header={"Home"} />
         </Route>
-        {/* <Route exact path="/discover">
+        <Route exact path="/discover">
           <Page title={"Discover"} category={DISCOVER} />
-        </Route> */}
+        </Route>
         <Route exact path="/popular">
           <Page title={"Popular"} category={POPULAR} />
         </Route>
@@ -39,8 +43,11 @@ function App() {
         <Route path="/games">
           <Page />
         </Route>
-        <Route path="/profile">
-          <Profile />
+        <Route exact path={ROUTES.SIGN_IN}>
+          <SignIn />
+        </Route>
+        <Route exact path={ROUTES.SIGN_UP}>
+          <SignUp />
         </Route>
         <Route path="/profilename/watchlist">
           <Watchlist />
@@ -48,7 +55,11 @@ function App() {
         <Route path="/movies/:movieId">
           <ItemDetails />
         </Route>
+        {/* <Route path="?s=:query">
+          <Page title={"Search results for..."} />
+        </Route> */}
       </Switch>
+      <Footer theme={theme} />
     </>
   );
 }

@@ -1,9 +1,10 @@
 import React, { useState, useContext } from "react";
-import styled from "styled-components";
+import styled from "styled-components/macro";
+import { BsSearch } from "react-icons/bs";
 
 import { Context } from "../contexts/context";
 
-const Search = () => {
+const Search = ({ width = "300px" }) => {
   const [query, setQuery] = useState("");
   const { setItems, API_KEY, dispatch, formatMovieWatchlist } = useContext(Context);
 
@@ -51,51 +52,42 @@ const Search = () => {
     return formattedQuery;
   };
 
+  // console.log(width);
+
   return (
-    <SearchWrapper>
+    <SearchWrapper width={width}>
       <form className="search__form" onSubmit={searchMovies}>
-        <div className="search__wrapper">
-          <input
-            className="search__input"
-            type="text"
-            name="query"
-            placeholder="Search for a movie..."
-            value={query}
-            onChange={handleChange}
-          />
-          <button className="search__btn">Search</button>
-        </div>
+        <input
+          className="search__input"
+          type="text"
+          name="query"
+          placeholder="Search for a movie..."
+          value={query}
+          onChange={handleChange}
+        />
+        <button className="search__btn">
+          {width > "300px" ? <span className="search__text">Search</span> : ""}
+          <span className="svg-container">
+            <BsSearch />
+          </span>
+        </button>
+        {/* <img id="search-icon" src={MagnifyingGlassSVG} alt="Magnifying Glass" /> */}
       </form>
     </SearchWrapper>
   );
 };
 
 const SearchWrapper = styled.div`
-  // Utkommenterat är en annan lösning för knappen inuti sökinputen
-  // Wrapper flex, input flex-grow - tror det är allt
-
-  // .search__form {
-  //   // width: 100%;
-  //   // display: flex;
-  //   // justify-content: center;
-  // }
-
-  .search__wrapper {
-    position: relative;
-    border-radius: 5px;
-
-    // width: 50%;
-    // display: flex;
-  }
+  position: relative;
+  width: ${(props) => props.width};
+  margin: 0 auto;
 
   .search__input {
     width: 100%;
     font-size: 1.1rem;
     border: none;
-    border-radius: 5px;
-    padding: 5px;
-    // padding: 7px;
-    // flex-grow: 2;
+    border-radius: 15px;
+    padding: 8px;
 
     ::placeholder {
       font-style: italic;
@@ -110,18 +102,43 @@ const SearchWrapper = styled.div`
     position: absolute;
     right: 0;
     top: 0;
+    height: 100%;
+    width: 30%;
+    color: white;
 
     padding: 0.4em 1.1em;
     border: none;
-    border-radius: 5px;
-    transition: background-color 250ms ease-in-out;
+    border-radius: 0 15px 15px 0;
+    transition: 250ms ease-in-out;
     // background-color: rgba(150, 150, 150, 0.8);
     background-color: rgba(0, 0, 0, 0.4);
+    display: flex;
+    justify-content: center;
+    align-items: center;
 
-    :hover {
+    &:hover {
       background-color: var(--main-orange);
-      color: white;
+      cursor: pointer;
     }
+
+    .search__text {
+      margin-right: 0.4rem;
+    }
+
+    .svg-container {
+      display: inline-flex;
+      align-items: center;
+
+      & > svg {
+        width: 1.25em;
+        height: 1.25em;
+        // margin-left: 0.4rem;
+      }
+    }
+
+    // &:active {
+    //   transform: translateY(2px);
+    // }
   }
 `;
 

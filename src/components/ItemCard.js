@@ -1,5 +1,5 @@
 import React, { useState, useContext, useReducer } from "react";
-import styled from "styled-components";
+import styled from "styled-components/macro";
 import logo from "../logo.svg";
 import PropTypes from "prop-types";
 
@@ -7,11 +7,12 @@ import { Link } from "react-router-dom";
 import { Context } from "../contexts/context";
 import { ThemeContext } from "../contexts/themeContext";
 import { ButtonContainer } from "./Button";
+import WatchlistToggle from "./watchlistToggle";
 
 const ItemCard = ({ item }) => {
-  const IMAGE_PATH = "https://image.tmdb.org/t/p/w600_and_h900_bestv2/"; // Sätt i en global constans-fil?
+  const IMAGE_PATH = "https://image.tmdb.org/t/p/w600_and_h900_bestv2/"; // Sätt i en global constants-fil?
   // const IMAGE_PATH = "https://image.tmdb.org/t/p/w600_and_h900_bestv2/xBHvZcjRiWyobQ9kxBhO6B2dtRI.jpg"
-  const { id, title, overview, poster_path, release_date, vote_average, genre_ids } = item;
+  const { id, title, overview, poster_path, release_date, vote_average, genre_ids, watchlisted } = item;
   const { handleDetails } = useContext(Context);
   const { theme } = useContext(ThemeContext);
 
@@ -25,72 +26,119 @@ const ItemCard = ({ item }) => {
   // console.log(title);
 
   return (
-    <ItemContainer className="col-4 mx-auto col-md-3 col-lg-3 my-3" theme={theme}>
-      <Link to={`/movies/${title}`}>
-        <div className="card" onClick={() => handleDetails(id)}>
+    <ItemContainer theme={theme} onClick={() => handleDetails(id)}>
+      <div className="card">
+        <Link to={`/movies/${title}`}>
           <div className="img-container">
             <img
+              className="card-img"
               src={`https://image.tmdb.org/t/p/w600_and_h900_bestv2/${poster_path}`}
               alt={`${title} Poster`}
-              className="card-img-top"
             />
           </div>
-          <div className="card-footer">
-            <div className="d-flex justify-content-between">
-              <h2>{title}</h2>
-              <span>
-                <img src={logo} />
-                {vote_average}
-              </span>
-            </div>
+        </Link>
+
+        <div className="card-footer">
+          <div className="test">
+            <h2>{title}</h2>
+            <span className="rating">
+              <img src={logo} />
+              {vote_average}
+            </span>
+          </div>
+          <div className="misc">
             <p>{release_date}</p>
-            {/* <p>{overview}</p> */}
+            <WatchlistToggle item={item} />
           </div>
         </div>
-      </Link>
+      </div>
     </ItemContainer>
   );
 };
 
 const ItemContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  width: 300px;
+  height: 510px;
+
   .card {
+    border-radius: 5px;
     transition: all 0.1s linear;
-  }
-
-  .card p {
-    margin: 0;
-    margin-top: -10px;
-    color: rgba(0, 0, 0, 0.6);
-  }
-
-  .card-footer h2 {
-    font-size: 1.2rem;
-    font-weight: 600;
-    // height: 50px;
+    border: 0.04rem solid rgba(0, 0, 0, 0);
+    color: black;
   }
 
   .img-container {
     position: relative;
     overflow: hidden;
-    background: rgba(0, 0, 0, 0);
+    height: 400px;
+    width: 300px;
+    border-radius: 5px 5px 0 0;
 
-    img {
+    .card-img {
+      display: block;
       opacity: 95%;
+      width: 100%;
+      height: 100%;
+      display: grid;
+      justify-content: center;
+      align-items: center;
     }
   }
 
-  &:hover {
-    .card {
-      border: 0.04rem solid rgba(0, 0, 0, 0.2);
-      // box-shadow: 0 10px 8px #ff5733;
-      box-shadow: 0 10px 10px rgba(0, 0, 0, 0.5);
-      cursor: pointer;
-      transform: translateY(-10px);
-      transition-delay: 0.1s; // För att delaya hover-translaten, men måste göras annorlunda - detta är en skitlösning
+  .card-footer {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    background-color: white;
+    border-radius: 0 0 5px 5px;
+    padding: 5px 10px;
+    width: 300px;
+
+    .test {
+      display: flex;
+      justify-content: space-between;
     }
+
+    h2 {
+      font-size: 1.2rem;
+      font-weight: 600;
+      height: 30px;
+      overflow: hidden;
+    }
+
+    .rating {
+      font-weight: 600;
+      font-size: 1.2rem;
+      width: 70px;
+      text-align: right;
+    }
+
+    .misc {
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+    }
+
+    p {
+      color: rgba(0, 0, 0, 0.6);
+    }
+  }
+
+  .card:hover {
+    border: 0.04rem solid rgba(0, 0, 0, 0.2);
+    box-shadow: 0 10px 10px rgba(0, 0, 0, 0.5);
+    cursor: pointer;
+    transform: translateY(-10px);
 
     img {
       opacity: 100%;
+    }
+
+    h2 {
+      color: var(--main-orange);
     }
   }
 
@@ -99,16 +147,9 @@ const ItemContainer = styled.div`
     color: black;
 
     :hover {
-      color: var(--main-orange);
-    }
-  }
-
-  span {
-    font-weight: 600;
-    font-size: 1.2rem;
-
-    img {
-      margin-top: -6px;
+      h2 {
+        color: var(--main-orange);
+      }
     }
   }
 `;
@@ -125,8 +166,12 @@ ItemCard.propTypes = {
 };
 
 ItemCard.defaultProps = {
-  poster_path:
-    "https://https://www.themoviedb.org/https://www.themoviedb.org/assets/2/v4/glyphicons/basic/glyphicons-basic-38-picture-grey-c2ebdbb057f2a7614185931650f8cee23fa137b93812ccb132b9df511df1cfac.svg/2/v4/glyphicons/basic/glyphicons-basic-38-picture-grey-c2ebdbb057f2a7614185931650f8cee23fa137b93812ccb132b9df511df1cfac.svg.wikimedia.org/wikipedia/commons/thumb/5/55/Question_Mark.svg/1280px-Question_Mark.svg.png",
+  poster_path: "../images/the-witcher-3.jpg",
 };
+
+// ItemCard.defaultProps = {
+//   poster_path:
+//     "https://www.themoviedb.org/assets/2/v4/glyphicons/basic/glyphicons-basic-38-picture-grey-c2ebdbb057f2a7614185931650f8cee23fa137b93812ccb132b9df511df1cfac.svg",
+// };
 
 export default ItemCard;

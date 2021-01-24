@@ -8,12 +8,16 @@
   --main-orange: #ff5733;
   --navbar-blue: #05668d;
   --alt-red-orange: #ff424f;
+
+  --main-background-color-dark: #282c34;
 }
 
 *,
 *::before,
 *::after {
   box-sizing: border-box;
+  margin: 0;
+  padding: 0;
 }
 
 .theme-btn {
@@ -24,4 +28,21 @@ body {
   background-color: #282c34;
   /* background-color: #05668d; */
   color: black;
+  min-height: 100vh;
+  height: 100%;
+  /* Remove horizontal scroll that appears due to vertical scroll existing */
+  overflow-x: hidden;
+}
+
+#homepage {
+  padding: 2em;
+}
+
+a {
+  color: white;
+  text-decoration: none;
+}
+
+a:hover {
+  color: #ff5733;
 }

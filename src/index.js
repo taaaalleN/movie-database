@@ -8,11 +8,14 @@ import { BrowserRouter as Router } from "react-router-dom";
 
 import { ContextProvider } from "./contexts/context";
 import { ThemeContextProvider } from "./contexts/themeContext";
-import { AuthContextProvider } from "./contexts/authContext";
+// import { AuthContextProvider } from "./contexts/authContext";
+import { firebase } from "./lib/firebase.prod";
+import { FirebaseContext } from "./contexts/firebase";
 
 ReactDOM.render(
   <ThemeContextProvider>
-    <AuthContextProvider>
+    {/* <AuthContextProvider> */}
+    <FirebaseContext.Provider value={{ firebase }}>
       <ContextProvider>
         <Router>
           <React.StrictMode>
@@ -20,7 +23,8 @@ ReactDOM.render(
           </React.StrictMode>
         </Router>
       </ContextProvider>
-    </AuthContextProvider>
+    </FirebaseContext.Provider>
+    {/* </AuthContextProvider> */}
   </ThemeContextProvider>,
   document.getElementById("root")
 );

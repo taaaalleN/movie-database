@@ -28,14 +28,21 @@ const ContextProvider = ({ children }) => {
   //   return localWatchlist ? JSON.parse(localWatchlist) : [];
   // });
   const [items, dispatch] = useReducer(movieReducer, initialState);
+  const [favorites, setFavorites] = useState(JSON.parse(localStorage.getItem("favorites")) || []);
 
   // useEffect(() => {
   //   localStorage.setItem("watchlist", JSON.stringify(watchlist));
   // }, [watchlist]);
 
   useEffect(() => {
-    localStorage.setItem("selectedItem", JSON.stringify(selectedItem));
+    if (selectedItem !== undefined) {
+      localStorage.setItem("selectedItem", JSON.stringify(selectedItem));
+    }
   }, [selectedItem]);
+
+  useEffect(() => {
+    localStorage.setItem("favorites", JSON.stringify(favorites));
+  }, [favorites]);
 
   // The Movie Database API
   // useEffect(() => {
@@ -110,6 +117,9 @@ const ContextProvider = ({ children }) => {
     setSelectedItem(wantedItem);
   };
 
+  // const [watchlisted, setWatchlisted] = useState(false);
+  // const toggleWatchlist = (item) => {};
+
   // const addToWatchlist = (movie) => {
   //   if (!movie) return;
   //   dispatch({ type: "ADD_TO_WATCHLIST", payload: movie });
@@ -117,7 +127,17 @@ const ContextProvider = ({ children }) => {
 
   return (
     <Context.Provider
-      value={{ items, selectedItem, API_KEY, handleDetails, dispatch, getMovies, formatMovieWatchlist }}
+      value={{
+        items,
+        selectedItem,
+        API_KEY,
+        handleDetails,
+        dispatch,
+        getMovies,
+        formatMovieWatchlist,
+        favorites,
+        setFavorites,
+      }}
     >
       {children}
     </Context.Provider>

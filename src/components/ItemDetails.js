@@ -1,10 +1,11 @@
 import React, { useContext, useEffect, useReducer } from "react";
-import styled from "styled-components";
+import styled from "styled-components/macro";
 import { Context } from "../contexts/context";
 import { ThemeContext } from "../contexts/themeContext";
 import logo from "../logo.svg";
 import { ButtonContainer } from "../components/Button";
 // import { watchlistReducer } from "../reducers/watchlistReducer";
+import WatchlistToggle from "./watchlistToggle";
 
 const ItemDetails = () => {
   const { selectedItem, dispatch, items, setItems } = useContext(Context);
@@ -34,10 +35,26 @@ const ItemDetails = () => {
   // }, []);
   // console.log(items.watchlist);
 
+  // console.log("Selected item is: ", selectedItem);
+  // console.log("Watchlisted: ", selectedItem.watchlisted);
+  // const AddRemove = (selectedItem) => {
+  //   if (selectedItem.watchlisted) {
+  //     dispatch({ type: "REMOVE_FROM_WATCHLIST", selectedItem.id });
+  //   }
+  //   dispatch({ type: "ADD_TO_WATCHLIST", selectedItem });
+
+  //   // return selectedItem.watchlist ?  "ADD_TO_WATCHLIST" : "REMOVE_FROM_WATCHLIST";
+  // };
+
+  // console.log(selectedItem);
+  // console.log(selectedItem.watchlisted);
+  console.log("items: ", items);
+  // console.log(items.watchlist.indexOf(selectedItem));
+
   return (
-    <DetailsWrapper theme={theme}>
-      <div className="details container">
-        <section className="inner">
+    <DetailsWrapper>
+      <DetailsContainer theme={theme}>
+        <section className="container">
           <div className="img-wrapper">
             <img
               src={`https://image.tmdb.org/t/p/w600_and_h900_bestv2/${selectedItem.poster_path}`}
@@ -45,70 +62,95 @@ const ItemDetails = () => {
             />
           </div>
           <div className="info">
-            <h2>{selectedItem.title}</h2>
+            <div className="title-row">
+              <h1>{selectedItem.title}</h1>
+              <WatchlistToggle item={selectedItem} />
+            </div>
             <div className="group">
-              <span>Release Date: {selectedItem.release_date}</span>
-              <span>
+              <p className="info-headline">
+                Release Date: <span>{selectedItem.release_date}</span>
+              </p>
+              <span className="rating">
                 <img src={logo} />
                 {selectedItem.vote_average}
               </span>
-              <span>{selectedItem.genre_ids}</span>
+              <p>
+                Genre ids:
+                <span> {selectedItem.genre_ids}</span>
+              </p>
               {/* <span>{selectedItem.runtime}</span> */}
             </div>
             <div id="description">
-              <h5 style={{ fontWeight: "600" }}>Synopsis</h5>
+              <h5 className="info-headline">Synopsis</h5>
               <p>{selectedItem.overview}</p>
             </div>
-          </div>
-          {/* <ButtonContainer
-            theme={theme}
-            onClick={() => dispatch({ type: "ADD_TO_WATCHLIST", movie: { selectedItem } })}
-          >
-            {selectedItem.watchlisted ? "Remove from watchlist" : "Add to watchlist"}
-          </ButtonContainer> */}
-          <ButtonContainer theme={theme} onClick={() => dispatch({ type: "ADD_TO_WATCHLIST", payload: selectedItem })}>
+            {/* <Button theme={theme} onClick={() => dispatch({ type: "ADD_TO_WATCHLIST", payload: selectedItem })}>
             {items.watchlist.includes(selectedItem) ? "Remove from watchlist" : "Add to watchlist"}
-          </ButtonContainer>
+          </Button> */}
+            {/* <Button theme={theme} onClick={() => AddRemove(selectedItem)}>
+            {items.watchlist.includes(selectedItem) ? "Remove from watchlist" : "Add to watchlist"}
+          </Button> */}
+
+            {/* General idea = if indexOf = -1 it doesn't exists in array and then Add to watchlist should display */}
+            {/* {items.watchlist.indexOf(selectedItem) !== -1 ? (
+              <Button
+                theme={theme}
+                onClick={() => dispatch({ type: "REMOVE_FROM_WATCHLIST", payload: { selectedItem } })}
+              >
+                Remove from watchlist
+              </Button>
+            ) : (
+              <Button theme={theme} onClick={() => dispatch({ type: "ADD_TO_WATCHLIST", payload: { selectedItem } })}>
+                Add to watchlist
+              </Button>
+            )} */}
+          </div>
         </section>
-      </div>
+      </DetailsContainer>
     </DetailsWrapper>
   );
 };
 
+const Button = styled(ButtonContainer)`
+  display: inline-block;
+  height: 50px;
+  // width: auto;
+  position: absolute;
+  top: 0;
+  right: 0;
+  // align-self: end;
+`;
+
 const DetailsWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  // align-items: center;
+  height: 100vh;
+`;
+
+const DetailsContainer = styled.div`
   color: #333;
+  position: relative;
+  top: -100px;
+  display: flex;
+  justify-content: center;
 
-  h2,
-  p {
-    margin: 0;
-    padding: 0;
-  }
-
-  .details {
+  .container {
     position: relative;
-    top: 50px;
 
     background-color: #ffff;
 
     border-radius: 8px;
     box-shadow: 0 0 8px rgba(0, 0, 0, 0, 6);
-  }
-
-  .inner {
-    padding: 20px 5px;
+    padding: 20px 20px;
     display: flex;
   }
 
   .img-wrapper {
-    // width: 90%;
-    // height: 90%;
     display: block;
-    min-width: 300px;
     width: 300px;
     height: 450px;
-    // position: relative;
-    // top: 0;
-    // left: 0;
     box-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
 
     img {
@@ -122,12 +164,40 @@ const DetailsWrapper = styled.div`
     }
   }
 
+  .title-row {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+
+    svg {
+      width: 32px;
+      height: 32px;
+    }
+  }
+
   .info {
+    position: relative;
     display: flex;
     flex-direction: column;
-    justify-content: space-around;
-
+    justify-content: space-between;
+    max-width: 600px;
     padding-left: 20px;
+
+    .info-headline {
+      font-size: 1.2em;
+      font-weight: 600;
+    }
+
+    .rating {
+      font-size: 1.5em;
+
+      img {
+        // width: auto;
+        height: 1em;
+        vertical-align: baseline;
+      }
+    }
 
     span {
       padding-right: 10px;
