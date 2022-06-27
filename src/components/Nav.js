@@ -1,22 +1,21 @@
 import React, { useContext, useState } from "react";
 import styled from "styled-components/macro";
 import { Link, NavLink } from "react-router-dom";
-// import { AuthContext } from "../contexts/authContext";
 import { ThemeContext, themes } from "../contexts/themeContext";
 
-import { Constants } from "../constants/constants";
 import { ButtonContainer } from "./Button";
 import Search from "./Search";
 import ThemeToggler from "./themeToggler";
 
 import * as ROUTES from "../constants/routes";
 
-const Navbar = () => {
-  // const { isAuthenticated, toggleAuth } = useContext(AuthContext);
+import { FirebaseContext } from "../contexts/firebase";
+
+const Navbar = ({ user }) => {
   const { theme, toggleTheme } = useContext(ThemeContext);
   const [showNav, setShowNav] = useState(false);
 
-  // const buttonText = isAuthenticated ? "Log out" : "Log in";
+  const { firebase } = useContext(FirebaseContext);
 
   return (
     <NavWrapper theme={theme} showNav={showNav}>
@@ -31,7 +30,7 @@ const Navbar = () => {
           <span className="navbar-toggler-icon"></span>
         </button> */}
         <Link to="/" className="navbar-brand site-title" onClick={() => setShowNav((showNav) => !showNav)}>
-          Unique Name
+          Movie Database
         </Link>
         <NavLink exact to="/" activeClassName="active" onClick={() => setShowNav((showNav) => !showNav)}>
           Home
@@ -52,21 +51,39 @@ const Navbar = () => {
       <div className="search-container">
         <Search />
       </div>
-      <div className="profile">
-        <NavLink to="/profile" activeClassName="active">
-          Profile Name
-        </NavLink>
-        <NavLink to="/profile" className="avatar-link">
-          <img
-            className="avatar"
-            src="https://pbs.twimg.com/profile_images/730612231021322240/Rl0_QYhL_400x400.jpg"
-            alt="profile-image"
-          />
-        </NavLink>
-        <ButtonContainer as={NavLink} href={ROUTES.SIGN_IN} theme={theme} to={ROUTES.SIGN_IN}>
-          Log in
-        </ButtonContainer>
-      </div>
+      {user ? (
+        <div className="profile">
+          <NavLink to="/profile" activeClassName="active">
+            {user.displayName}
+          </NavLink>
+          <Link to="/profile" className="avatar-link">
+            <img
+              className="avatar"
+              src="https://pbs.twimg.com/profile_images/730612231021322240/Rl0_QYhL_400x400.jpg"
+              alt="profile-image"
+            />
+          </Link>
+          <ButtonContainer as={Link} to={ROUTES.SIGN_IN} theme={theme} onClick={() => firebase.auth().signOut()}>
+            Log out
+          </ButtonContainer>
+        </div>
+      ) : (
+        <div className="profile">
+          <NavLink to="/profile" activeClassName="active">
+            Username
+          </NavLink>
+          <Link to="/profile" className="avatar-link">
+            <img
+              className="avatar"
+              src="https://pbs.twimg.com/profile_images/730612231021322240/Rl0_QYhL_400x400.jpg"
+              alt="profile-image"
+            />
+          </Link>
+          <ButtonContainer as={Link} to={ROUTES.SIGN_IN} theme={theme} to={ROUTES.SIGN_IN}>
+            Log in
+          </ButtonContainer>
+        </div>
+      )}
     </NavWrapper>
   );
 };
@@ -83,7 +100,7 @@ const TestLink = styled(NavLink)`
 
 const NavWrapper = styled.div`
   background: ${({ theme }) => (theme === "dark" ? "#05668d" : "#02c39a")};
-  width: 100vw;
+  width: 100%;
   height: 100px;
   // max-height: 100px;
   // height: 100%;

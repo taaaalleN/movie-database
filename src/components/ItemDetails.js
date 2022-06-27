@@ -52,9 +52,9 @@ const ItemDetails = () => {
   // console.log(items.watchlist.indexOf(selectedItem));
 
   return (
-    <DetailsWrapper>
-      <DetailsContainer theme={theme}>
-        <section className="container">
+    <DetailsContainer>
+      <DetailsWrapper theme={theme}>
+        <section className="details-inner">
           <div className="img-wrapper">
             <img
               src={`https://image.tmdb.org/t/p/w600_and_h900_bestv2/${selectedItem.poster_path}`}
@@ -66,23 +66,23 @@ const ItemDetails = () => {
               <h1>{selectedItem.title}</h1>
               <WatchlistToggle item={selectedItem} />
             </div>
-            <div className="group">
+            <div id="description">
+              <h5 className="info-headline">Synopsis</h5>
+              <p class="synopsis">{selectedItem.overview}</p>
+            </div>
+            <div className="misc">
               <p className="info-headline">
                 Release Date: <span>{selectedItem.release_date}</span>
+              </p>
+              <p>
+                Genre ids:
+                <span> {selectedItem.genre_ids}</span>
               </p>
               <span className="rating">
                 <img src={logo} />
                 {selectedItem.vote_average}
               </span>
-              <p>
-                Genre ids:
-                <span> {selectedItem.genre_ids}</span>
-              </p>
               {/* <span>{selectedItem.runtime}</span> */}
-            </div>
-            <div id="description">
-              <h5 className="info-headline">Synopsis</h5>
-              <p>{selectedItem.overview}</p>
             </div>
             {/* <Button theme={theme} onClick={() => dispatch({ type: "ADD_TO_WATCHLIST", payload: selectedItem })}>
             {items.watchlist.includes(selectedItem) ? "Remove from watchlist" : "Add to watchlist"}
@@ -106,8 +106,8 @@ const ItemDetails = () => {
             )} */}
           </div>
         </section>
-      </DetailsContainer>
-    </DetailsWrapper>
+      </DetailsWrapper>
+    </DetailsContainer>
   );
 };
 
@@ -121,7 +121,7 @@ const Button = styled(ButtonContainer)`
   // align-self: end;
 `;
 
-const DetailsWrapper = styled.div`
+const DetailsContainer = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -129,22 +129,22 @@ const DetailsWrapper = styled.div`
   height: 100vh;
 `;
 
-const DetailsContainer = styled.div`
+const DetailsWrapper = styled.div`
   color: #333;
   position: relative;
   top: -100px;
   display: flex;
   justify-content: center;
 
-  .container {
+  .details-inner {
     position: relative;
-
     background-color: #ffff;
-
     border-radius: 8px;
     box-shadow: 0 0 8px rgba(0, 0, 0, 0, 6);
     padding: 20px 20px;
     display: flex;
+    width: 50%;
+    max-width: 1300px;
   }
 
   .img-wrapper {
@@ -155,12 +155,13 @@ const DetailsContainer = styled.div`
 
     img {
       display: block;
-      width: 100%;
-      min-width: 100%;
+      width: auto;
       height: 100%;
-      min-height: 100%;
+      // min-width: 100%;
+      // min-height: 100%;
       border-width: 0px;
       outline: none;
+      min-width: 100%;
     }
   }
 
@@ -181,8 +182,9 @@ const DetailsContainer = styled.div`
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    max-width: 600px;
+    // max-width: 600px;
     padding-left: 20px;
+    flex: 1;
 
     .info-headline {
       font-size: 1.2em;
@@ -194,7 +196,9 @@ const DetailsContainer = styled.div`
 
       img {
         // width: auto;
-        height: 1em;
+        // height: 1em;
+        height: 20px;
+        width: 20px;
         vertical-align: baseline;
       }
     }
@@ -202,6 +206,16 @@ const DetailsContainer = styled.div`
     span {
       padding-right: 10px;
     }
+
+    .synopsis {
+      line-height: 1.4;
+    }
+  }
+
+  .misc {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
   }
 
   #description {

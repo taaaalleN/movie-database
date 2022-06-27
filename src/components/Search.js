@@ -86,7 +86,7 @@ const SearchWrapper = styled.div`
     width: 100%;
     font-size: 1.1rem;
     border: none;
-    border-radius: 15px;
+    border-radius: 5px;
     padding: 8px;
 
     ::placeholder {
@@ -94,7 +94,9 @@ const SearchWrapper = styled.div`
     }
 
     :focus {
-      box-shadow: 0 0 10px #ff5733;
+      // box-shadow: 0 0 10px #ff5733;
+      outline: 2px solid var(--main-orange);
+      // outline: none;
     }
   }
 
@@ -103,12 +105,12 @@ const SearchWrapper = styled.div`
     right: 0;
     top: 0;
     height: 100%;
-    width: 30%;
+    width: 20%;
     color: white;
 
     padding: 0.4em 1.1em;
     border: none;
-    border-radius: 0 15px 15px 0;
+    border-radius: 0 5px 5px 0;
     transition: 250ms ease-in-out;
     // background-color: rgba(150, 150, 150, 0.8);
     background-color: rgba(0, 0, 0, 0.4);

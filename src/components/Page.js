@@ -37,7 +37,11 @@ const Page = ({ title, category }) => {
         <div className="backdrop-container">
           <img
             className="backdrop-image"
-            src={items.data.length > 0 ? `https://image.tmdb.org/t/p/original${items.data[0].backdrop_path}` : "/asdj"}
+            src={
+              items.data.length > 0
+                ? `https://image.tmdb.org/t/p/original${items.data[0].backdrop_path}`
+                : "https://www.unfe.org/wp-content/uploads/2019/04/SM-placeholder-1024x512.png"
+            }
             alt="Hero image"
           />
           <div className="backdrop-blur"></div>

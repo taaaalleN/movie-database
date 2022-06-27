@@ -7,13 +7,14 @@ import * as ROUTES from "../constants/routes";
 export default function SignUp() {
   const history = useHistory();
   const { firebase } = useContext(FirebaseContext);
+  const db = firebase.firestore();
 
-  const [firstName, setFirstName] = useState("");
+  const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
 
-  const isInvalid = password === "" || email === "" || firstName === "";
+  const isInvalid = password === "" || email === "" || username === "";
 
   const handleSignUp = (event) => {
     event.preventDefault();
@@ -24,15 +25,23 @@ export default function SignUp() {
       .then((result) => {
         result.user
           .updateProfile({
-            displayName: firstName,
+            displayName: username,
             photoURL: Math.floor(Math.random() * 5) + 1,
           })
           .then(() => {
-            history.push(ROUTES.BROWSE);
+            db.collection("users").doc(result.user.uid).set({
+              favorites: [
+                // { title: "War of the Worlds", director: "Steven Spielberg", rating: "8/10" },
+                // { title: "Lucy", director: "Luc Besson", rating: "6,5/10" },
+              ],
+            });
+          })
+          .then(() => {
+            history.push(ROUTES.PROFILE);
           });
       })
       .catch((error) => {
-        setFirstName("");
+        setUsername("");
         setEmail("");
         setPassword("");
         setError(error.message);
@@ -46,10 +55,10 @@ export default function SignUp() {
         {error && <Form.Error>{error}</Form.Error>}
         <Form.Base onSubmit={handleSignUp} method="POST">
           <Form.Input
-            placeholder="First Name"
+            placeholder="Username"
             autoComplete="off"
-            value={firstName}
-            onChange={({ target }) => setFirstName(target.value)}
+            value={username}
+            onChange={({ target }) => setUsername(target.value)}
           />
           <Form.Input placeholder="Email" value={email} onChange={({ target }) => setEmail(target.value)} />
           <Form.Input
@@ -69,6 +78,13 @@ export default function SignUp() {
             This page is protected by Google reCAPTCHA to ensure you're not a bot. Learn more.
           </Form.TextSmall>
         </Form.Base>
+      </Form>
+      <Form>
+        <Form.Title>Sign up with a Google account</Form.Title>
+        <Form.Submit>
+          Sign up with Google
+          <img src="https://img.icons8.com/ios-filled/50/000000/google-logo.png" alt="google icon" />
+        </Form.Submit>
       </Form>
     </>
   );

@@ -6,6 +6,7 @@ import { watchlistReducer } from "../reducers/watchlistReducer";
 
 const WatchlistToggle = ({ item }) => {
   const { favorites, setFavorites } = useContext(Context);
+
   //   const [watchlisted, setWatchlisted] = useState(false);
 
   //   const toggleWatchlist = () => {

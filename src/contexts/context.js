@@ -29,13 +29,20 @@ const ContextProvider = ({ children }) => {
   // });
   const [items, dispatch] = useReducer(movieReducer, initialState);
   const [favorites, setFavorites] = useState(JSON.parse(localStorage.getItem("favorites")) || []);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    setTimeout(() => {
+      setLoading(false);
+    }, 1000);
+  }, []);
 
   // useEffect(() => {
   //   localStorage.setItem("watchlist", JSON.stringify(watchlist));
   // }, [watchlist]);
 
   useEffect(() => {
-    if (selectedItem !== undefined) {
+    if (typeof selectedItem !== undefined) {
       localStorage.setItem("selectedItem", JSON.stringify(selectedItem));
     }
   }, [selectedItem]);
@@ -137,6 +144,7 @@ const ContextProvider = ({ children }) => {
         formatMovieWatchlist,
         favorites,
         setFavorites,
+        loading,
       }}
     >
       {children}

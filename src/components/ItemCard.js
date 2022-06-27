@@ -25,14 +25,21 @@ const ItemCard = ({ item }) => {
   // console.log(props.item.title);
   // console.log(title);
 
+  // const regex = new RegExp(/\s/g);
+  const formattedTitle = title.replace(/\s/g, "-").toLowerCase();
+
   return (
     <ItemContainer theme={theme} onClick={() => handleDetails(id)}>
       <div className="card">
-        <Link to={`/movies/${title}`}>
+        <Link to={`/movies/${formattedTitle}`}>
           <div className="img-container">
             <img
               className="card-img"
-              src={`https://image.tmdb.org/t/p/w600_and_h900_bestv2/${poster_path}`}
+              src={
+                poster_path != null
+                  ? `https://image.tmdb.org/t/p/w600_and_h900_bestv2/${poster_path}`
+                  : "https://cdn.shopify.com/s/files/1/0533/2089/files/placeholder-images-image_large.png?format=jpg&quality=90&v=1530129081"
+              }
               alt={`${title} Poster`}
             />
           </div>
@@ -100,12 +107,13 @@ const ItemContainer = styled.div`
     .test {
       display: flex;
       justify-content: space-between;
+      height: 52px;
     }
 
     h2 {
-      font-size: 1.2rem;
+      font-size: 1.1rem;
       font-weight: 600;
-      height: 30px;
+      height: 100%;
       overflow: hidden;
     }
 
